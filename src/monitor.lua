@@ -7,7 +7,7 @@
 
 -- The standard comma-seperated USGN list.
 -- Leave empty to allow for every spectator.
-local ACCESSCONTROL = { 7134 }
+local ACCESSCONTROL = {}
 
 
 Monitor = {}
@@ -57,7 +57,7 @@ if not hudtxt2 then
 	end
 end
 
-
+local images = {}
 function Monitor.reset(id)
 	if id then
 		for spec in playersEnabled() do
@@ -114,7 +114,6 @@ function Monitor.toggle(id, key)
 end
 
 
-local images = {}
 function Monitor.draw()
 	for spec in playersEnabled() do
 		if not images[spec] then images[spec] = {} end
@@ -150,6 +149,8 @@ function Monitor.draw()
 				}
 				imagecolor(images[spec][p][1], 100, 100, 100)
 				imagescale(images[spec][p][1], 5, 0.5)
+				imagealpha(images[spec][p][1], 0.23)
+				imagealpha(images[spec][p][2], 0.23)
 				
 				imagecolor(images[spec][p][3], 0, 0, 0)
 				imagescale(images[spec][p][3], 1, 0.5)
@@ -197,7 +198,9 @@ function Monitor.draw()
 				}
 				imagecolor(images[spec][p][1], 100, 100, 100)
 				imagescale(images[spec][p][1], 5, 0.5)
-	
+				imagealpha(images[spec][p][1], 0.23)
+				imagealpha(images[spec][p][2], 0.23)
+				
 				imagecolor(images[spec][p][3], 0, 0, 0)
 				imagescale(images[spec][p][3], 1, 0.5)
 				imagealpha(images[spec][p][3], 0.75)
