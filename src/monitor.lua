@@ -2,7 +2,12 @@
 -- Monitor, a Lua script for CS2D which shows player information on screen.
 -- Author: sundown3r
 -- https://sundown3r.wordpress.com/2012/12/26/monitor-cs2d/
--- Last update: 27/12/2012
+-- Last update: 30/07/13
+--
+-- Modified by Error (30/07/13)
+-- * Fixed: Disabling the gui didn't free the images & hudtxt
+-- * Changed: Now toggles with 'say "!specgui"' (instead of serveraction 1)
+-- * Note: There is quite some code duplication, refactoring would help :)
 --------------------------
 
 -- The standard comma-seperated USGN list.
@@ -105,12 +110,37 @@ function ACCESSCONTROL:contains(e)
 	end
 end
 
-function Monitor.toggle(id, key)
-	if key == 1 then
-		if #ACCESSCONTROL == 0 or ACCESSCONTROL:contains(player(id, "usgn")) then
-			speclist[id] = not speclist[id]
-		end
-	end
+function Monitor.toggle(id, message)
+  if message == "!specgui" then
+    if #ACCESSCONTROL == 0 or ACCESSCONTROL:contains(player(id, "usgn")) then
+      speclist[id] = not speclist[id]
+
+      if not speclist[id] then
+        -- release graphics & hudtxt:
+        freeimage(images[id][33][1]);
+        freeimage(images[id][33][2]);
+        images[id][33] = nil
+        hudtxt(48)
+        hudtxt(49)
+        for p in players(t) do
+          freeimage(images[id][p][1]);
+          freeimage(images[id][p][2]);
+          freeimage(images[id][p][3]);
+          images[id][p] = nil
+          hudtxt(p);
+          hudtxt(p + 20);
+        end
+        for p in players(ct) do
+          freeimage(images[id][p][1]);
+          freeimage(images[id][p][2]);
+          freeimage(images[id][p][3]);
+          images[id][p] = nil
+          hudtxt(p);
+          hudtxt(p + 20);
+        end
+      end
+    end
+  end
 end
 
 
@@ -242,4 +272,4 @@ addhook('ms100', 'Monitor.draw')
 addhook('spawn', 'Monitor.reset')
 addhook('leave', 'Monitor.leave')
 addhook('team',  'Monitor.leave')
-addhook('serveraction', 'Monitor.toggle')
+addhook('say',   'Monitor.toggle')

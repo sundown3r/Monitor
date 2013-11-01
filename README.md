@@ -20,5 +20,5 @@ Installation
 ------------
 
 Simply drop *src/Monitor.lua* in the directory *sys/lua/autorun/* and start a 
-server. Press F2 in-game to toggle Monitor view (only as spectator).
+server. Say *!specgui* in-game to toggle Monitor view (only as spectator).
 
